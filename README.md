@@ -1,12 +1,12 @@
 # python-azuredatashare
-Create an ADLS Gen2 File System dataset on an Azure Data Share share resource via the REST API.  This uses an application registration + client secret (Service Principal) for authentication and authorization.
+Create an ADLS Gen2 File System dataset on an Azure Data Share share resource via the REST API.  This uses an AAD application registration + client secret (Service Principal) for authentication and authorization.
 
 # Create Environment (Windows):
 
+You will need a Python 3.7+ environment to run the script.  If you are on Windows and have Python 3.7+ installed, you can run the following command via the command prompt in the same directory where this repo is located:
+
 ```
-python.exe -m venv .venv
-.venv\Scripts\activate.bat
-python -m pip install --upgrade pip
+create_env.bat
 ```
 
 # Secrets
