@@ -22,7 +22,10 @@ def authenticate_to_azure(secrets):
     r = requests.post(url,headers=headers,data=data)
     return r.json()['access_token']
 
-def create_dataset(secrets,token,resource_group,storage_account_name,datashare_name,share_name,dataset_name):
+def create_dataset(
+    secrets,token,storage_resource_group,storage_account_name,
+    datashare_resource_group,datashare_name,share_name,dataset_name
+    ):
     api_version = '2019-11-01'
     subscription_id = secrets['SUBSCRIPTIONID']
 
@@ -31,7 +34,7 @@ def create_dataset(secrets,token,resource_group,storage_account_name,datashare_n
         "properties":{
             "storageAccountName": storage_account_name,
             "fileSystem":"data",
-            "resourceGroup": resource_group,           
+            "resourceGroup": storage_resource_group,           
             "subscriptionId": subscription_id
         }
     }
@@ -39,7 +42,7 @@ def create_dataset(secrets,token,resource_group,storage_account_name,datashare_n
     h = {'Authorization':'Bearer '+ token,'Content-Type':'application/json'}
     p = {'api-version': api_version}
     
-    url = f'https://management.azure.com/subscriptions/{subscription_id}/resourceGroups/{resource_group}/providers/Microsoft.DataShare/accounts/{datashare_name}/shares/{share_name}/dataSets/{dataset_name}'
+    url = f'https://management.azure.com/subscriptions/{subscription_id}/resourceGroups/{datashare_resource_group}/providers/Microsoft.DataShare/accounts/{datashare_name}/shares/{share_name}/dataSets/{dataset_name}'
 
     r = requests.put(url=url,headers=h,params=p,json=body)
     return r.json()
@@ -51,8 +54,9 @@ if __name__ == '__main__':
     dataset = create_dataset(
         secrets=secrets,
         token=token,
-        resource_group='rg_crosstenant',
+        storage_resource_group='rg_crosstenant',
         storage_account_name='kmstorageaccount',
+        datashare_resource_group = 'rg_crosstenant',
         datashare_name='kmdatashare',
         share_name='kmdatalakeshare',
         dataset_name='data'
